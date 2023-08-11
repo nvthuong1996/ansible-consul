@@ -140,7 +140,7 @@
         - name: Generate gossip encryption key
           shell: "PATH={{ consul_bin_path }}:$PATH consul keygen > {{ gossip_key_tempfile.path }}"
           register: consul_keygen
-         become: false
+          become: false
 
         - name: Fetch key locally to share with other nodes
           become: false
