@@ -140,6 +140,7 @@
         - name: Generate gossip encryption key
           shell: "PATH={{ consul_bin_path }}:$PATH consul keygen > {{ gossip_key_tempfile.path }}"
           register: consul_keygen
+          become: false
 
         - name: Fetch key locally to share with other nodes
           become: false
@@ -148,13 +149,13 @@
             dest: "{{ consul_raw_key_file.path }}"
             flat: true
 
-#      always:
-#        - name: Clean up temporary file
-#          become: false
-#          file:
-#            path: "{{ gossip_key_tempfile.path }}"
-#            state: absent
-#          when: gossip_key_tempfile is defined
+      always:
+        - name: Clean up temporary file
+          become: false
+          file:
+            path: "{{ gossip_key_tempfile.path }}"
+            state: absent
+          when: gossip_key_tempfile is defined
 
     - name: Read gossip encryption key for servers that require it
       set_fact:
